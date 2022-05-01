@@ -14,7 +14,11 @@ fun MineField(game: MutableState<Game>) {
         Row {
             for (column in 0 until game.value.getSize().columns) {
                 setMineButton(game, row, column, { game.value.mineFoundAction() }) {
-                    game.value.clearZoneAction(it)
+//                    if (it.nearbyMines == 0) {
+                        game.value = game.value.clearZoneAction(it)
+//                    } else {
+
+//                    }
                 }
             }
         }
