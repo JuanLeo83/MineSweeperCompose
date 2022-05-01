@@ -1,4 +1,4 @@
-package core
+package core.model
 
 data class Cell(
     val hasMine: Boolean,

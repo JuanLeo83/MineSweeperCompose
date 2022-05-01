@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import core.Game
+import ui.viewmodel.Game
 
 @Composable
 fun GameCanvas(game: MutableState<Game>) {

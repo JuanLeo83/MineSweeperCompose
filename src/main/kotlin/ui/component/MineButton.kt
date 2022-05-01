@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import core.Cell
-import core.GameSize
+import core.model.Cell
+import core.model.GameSize
 
 @Preview
 @Composable

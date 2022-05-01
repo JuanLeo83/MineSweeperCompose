@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
-import core.Difficult
-import core.Game
-import core.GameSize
+import core.model.Difficult
+import ui.viewmodel.Game
+import core.model.GameSize
 import ui.component.GameCanvas
 import ui.component.SideMenu
 

@@ -1,4 +1,4 @@
-package core
+package core.model
 
 sealed class GameSize(val rows: Int, val columns: Int) {
     object Small: GameSize(10, 8)

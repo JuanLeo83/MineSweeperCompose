@@ -13,9 +13,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import core.Difficult
-import core.Game
-import core.GameSize
+import core.model.Difficult
+import ui.viewmodel.Game
+import core.model.GameSize
 
 @Preview
 @Composable

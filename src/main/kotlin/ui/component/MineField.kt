@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import core.Cell
-import core.Game
+import core.model.Cell
+import ui.viewmodel.Game
 
 @Composable
 fun MineField(game: MutableState<Game>) {
