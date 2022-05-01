@@ -29,22 +29,22 @@ fun MineButtonPreview() {
     Column {
         Row {
             MineButton(GameSize.Small, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Small, Cell(false), mutableStateOf(false))
+            MineButton(GameSize.Small, Cell(false, nearbyMines = 1), mutableStateOf(false))
             MineButton(GameSize.Small, Cell(true), mutableStateOf(false))
         }
         Row {
             MineButton(GameSize.Medium, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Medium, Cell(false), mutableStateOf(false))
+            MineButton(GameSize.Medium, Cell(false, nearbyMines = 1), mutableStateOf(false))
             MineButton(GameSize.Medium, Cell(true), mutableStateOf(false))
         }
         Row {
             MineButton(GameSize.Big, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Big, Cell(false), mutableStateOf(false))
+            MineButton(GameSize.Big, Cell(false, nearbyMines = 1), mutableStateOf(false))
             MineButton(GameSize.Big, Cell(true), mutableStateOf(false))
         }
         Row {
             MineButton(GameSize.Biggest, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Biggest, Cell(false), mutableStateOf(false))
+            MineButton(GameSize.Biggest, Cell(false, nearbyMines = 1), mutableStateOf(false))
             MineButton(GameSize.Biggest, Cell(true), mutableStateOf(false))
         }
     }
@@ -131,9 +131,9 @@ private fun HideElement(gameSize: GameSize, hasMine: Boolean, nearbyMines: Int) 
 private fun getBombPadding(gameSize: GameSize): Dp {
     return when (gameSize) {
         GameSize.Small -> 10.dp
-        GameSize.Medium -> 10.dp
-        GameSize.Big -> 8.dp
-        GameSize.Biggest -> 5.dp
+        GameSize.Medium -> 7.dp
+        GameSize.Big -> 4.dp
+        GameSize.Biggest -> 3.dp
     }
 }
 
@@ -153,10 +153,10 @@ private fun getTextColor(nearbyMines: Int): Color {
 
 private fun getFontSize(gameSize: GameSize): TextUnit {
     return when (gameSize) {
-        GameSize.Small -> 40.sp
-        GameSize.Medium -> 35.sp
-        GameSize.Big -> 30.sp
-        GameSize.Biggest -> 20.sp
+        GameSize.Small -> 30.sp
+        GameSize.Medium -> 25.sp
+        GameSize.Big -> 18.sp
+        GameSize.Biggest -> 12.sp
     }
 }
 
