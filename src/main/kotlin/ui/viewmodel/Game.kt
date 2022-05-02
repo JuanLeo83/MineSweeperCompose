@@ -12,7 +12,13 @@ class Game {
     private lateinit var size: GameSize
     fun getSize() = size
 
+    private lateinit var difficult: Difficult
+    fun getDifficult() = difficult
+
     private lateinit var field: Field
+
+    var gameLost: Boolean = false
+    private set
 
     private val detectNearbyMinesUseCase = DetectNearbyMinesUseCase()
     private val generateGameUseCase = GenerateGameUseCase(detectNearbyMinesUseCase)
@@ -20,6 +26,8 @@ class Game {
 
     fun generate(size: GameSize, difficult: Difficult) {
         this.size = size
+        this.difficult = difficult
+
         field = generateGameUseCase.generate(size, difficult)
     }
 
@@ -27,18 +35,21 @@ class Game {
         return field.getCell(size, row, column)
     }
 
-    fun mineFoundAction() {
-        println("Fin del juego")
+    fun mineFoundAction(): Game {
+        val game = clone()
+        game.gameLost = true
+        return game
     }
 
-    private fun initialize(size: GameSize, field: Field) {
+    private fun initialize(size: GameSize, difficult: Difficult, field: Field) {
         this.size = size
+        this.difficult = difficult
         this.field = field
     }
 
     private fun clone(): Game {
         val game = Game()
-        game.initialize(size, field)
+        game.initialize(size, difficult, field)
         return game
     }
 

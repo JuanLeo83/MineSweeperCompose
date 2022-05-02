@@ -13,7 +13,9 @@ fun MineField(game: MutableState<Game>) {
     for (row in 0 until game.value.getSize().rows) {
         Row {
             for (column in 0 until game.value.getSize().columns) {
-                setMineButton(game, row, column, { game.value.mineFoundAction() }) {
+                setMineButton(game, row, column, {
+                    game.value = game.value.mineFoundAction()
+                }) {
                     game.value = game.value.clearZoneAction(it)
                 }
             }
@@ -35,7 +37,7 @@ private fun setMineButton(
 
     cell?.let {
         MineButton(
-            gameSize = game.value.getSize(),
+            game = game,
             cell = cell,
             isVisible = isVisible,
             bombAction = bombAction,

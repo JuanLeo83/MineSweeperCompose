@@ -21,38 +21,30 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.model.Cell
+import core.model.Difficult
 import core.model.GameSize
+import ui.viewmodel.Game
 
 @Preview
 @Composable
 fun MineButtonPreview() {
+    val firstGame = Game()
+    firstGame.generate(GameSize.Small, Difficult.Easy)
+
+    val game = remember { mutableStateOf(firstGame) }
+
     Column {
         Row {
-            MineButton(GameSize.Small, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Small, Cell(false, nearbyMines = 1), mutableStateOf(false))
-            MineButton(GameSize.Small, Cell(true), mutableStateOf(false))
-        }
-        Row {
-            MineButton(GameSize.Medium, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Medium, Cell(false, nearbyMines = 1), mutableStateOf(false))
-            MineButton(GameSize.Medium, Cell(true), mutableStateOf(false))
-        }
-        Row {
-            MineButton(GameSize.Big, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Big, Cell(false, nearbyMines = 1), mutableStateOf(false))
-            MineButton(GameSize.Big, Cell(true), mutableStateOf(false))
-        }
-        Row {
-            MineButton(GameSize.Biggest, Cell(true), isVisible = mutableStateOf(true))
-            MineButton(GameSize.Biggest, Cell(false, nearbyMines = 1), mutableStateOf(false))
-            MineButton(GameSize.Biggest, Cell(true), mutableStateOf(false))
+            MineButton(game, Cell(true), isVisible = mutableStateOf(true))
+            MineButton(game, Cell(false, nearbyMines = 1), mutableStateOf(false))
+            MineButton(game, Cell(true), mutableStateOf(false))
         }
     }
 }
 
 @Composable
 fun MineButton(
-    gameSize: GameSize,
+    game: MutableState<Game>,
     cell: Cell,
     isVisible: MutableState<Boolean>,
     bombAction: () -> Unit = {},
@@ -60,7 +52,7 @@ fun MineButton(
 ) {
     val showFlag = remember { mutableStateOf(false) }
 
-    val cellSize = getCellSize(gameSize)
+    val cellSize = getCellSize(game.value.getSize())
 
     Box(
         modifier = Modifier
@@ -68,10 +60,11 @@ fun MineButton(
             .height(cellSize),
         contentAlignment = Alignment.Center
     ) {
-        HideElement(gameSize, cell.hasMine, cell.nearbyMines)
+        HideElement(game.value.getSize(), cell.hasMine, cell.nearbyMines)
 
         if (isVisible.value) {
             Button(
+                enabled = !game.value.gameLost,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 modifier = Modifier
                     .fillMaxSize()
