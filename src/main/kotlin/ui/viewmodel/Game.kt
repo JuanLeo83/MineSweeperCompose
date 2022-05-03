@@ -4,6 +4,7 @@ import core.model.Cell
 import core.model.Difficult
 import core.model.Field
 import core.model.GameSize
+import core.usecase.ClearMineCellsUseCase
 import core.usecase.ClearZoneWithoutMinesUseCase
 import core.usecase.DetectNearbyMinesUseCase
 import core.usecase.GenerateGameUseCase
@@ -20,9 +21,13 @@ class Game {
     var gameLost: Boolean = false
     private set
 
+    var gameWin: Boolean = false
+    private set
+
     private val detectNearbyMinesUseCase = DetectNearbyMinesUseCase()
     private val generateGameUseCase = GenerateGameUseCase(detectNearbyMinesUseCase)
     private val clearZoneWithoutMinesUseCase = ClearZoneWithoutMinesUseCase()
+    private val clearMineCellsUseCase = ClearMineCellsUseCase()
 
     fun generate(size: GameSize, difficult: Difficult) {
         this.size = size
@@ -36,6 +41,8 @@ class Game {
     }
 
     fun mineFoundAction(): Game {
+        field = clearMineCellsUseCase.clear(size, field)
+
         val game = clone()
         game.gameLost = true
         return game

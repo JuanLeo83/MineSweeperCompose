@@ -2,7 +2,9 @@ package ui.component
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -12,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -53,6 +56,7 @@ fun MineButton(
     val showFlag = remember { mutableStateOf(false) }
 
     val cellSize = getCellSize(game.value.getSize())
+    val backgroundColor = remember { mutableStateOf(Color.Transparent) }
 
     Box(
         modifier = Modifier
@@ -60,7 +64,7 @@ fun MineButton(
             .height(cellSize),
         contentAlignment = Alignment.Center
     ) {
-        HideElement(game.value.getSize(), cell.hasMine, cell.nearbyMines)
+        HideElement(game.value.getSize(), cell.hasMine, cell.nearbyMines, backgroundColor)
 
         if (isVisible.value) {
             Button(
@@ -74,6 +78,7 @@ fun MineButton(
 
                     if (cell.hasMine) {
                         bombAction()
+                        backgroundColor.value = Color.Red
                     } else {
                         clearZoneAction(cell)
                     }
@@ -103,13 +108,17 @@ private fun getCellSize(gameSize: GameSize): Dp {
 }
 
 @Composable
-private fun HideElement(gameSize: GameSize, hasMine: Boolean, nearbyMines: Int) {
+private fun HideElement(gameSize: GameSize, hasMine: Boolean, nearbyMines: Int, backgroundColor: MutableState<Color>) {
     if (hasMine) {
         Image(
             painter = painterResource("bomb.png"),
             contentDescription = "bomb",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.padding(getBombPadding(gameSize))
+            modifier = Modifier
+                .padding(1.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(color = backgroundColor.value)
+                .padding(getBombPadding(gameSize))
         )
     } else {
         Text(
