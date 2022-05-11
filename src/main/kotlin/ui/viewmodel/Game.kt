@@ -62,6 +62,9 @@ class Game {
 
     fun clearZoneAction(cell: Cell): Game {
         field = clearZoneWithoutMinesUseCase.clear(size, field, cell)
-        return clone()
+
+        val game = clone()
+        game.gameWin = field.remainingFreeCells == 0
+        return game
     }
 }

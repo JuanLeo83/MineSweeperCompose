@@ -11,7 +11,6 @@ class ClearZoneWithoutMinesUseCase {
 
     private val nextIterationToInspect = mutableListOf<Cell>()
     private val toInspect = mutableListOf<Cell>()
-    private val toClean = mutableMapOf<Cell, Cell>()
 
     fun clear(size: GameSize, field: Field, cell: Cell): Field {
         this.size = size
@@ -19,7 +18,6 @@ class ClearZoneWithoutMinesUseCase {
 
         nextIterationToInspect.add(cell)
         checkToInspect()
-        clearRestOfCells()
 
         return this.field
     }
@@ -30,10 +28,12 @@ class ClearZoneWithoutMinesUseCase {
         nextIterationToInspect.clear()
 
         toInspect.map {
-            clearCell(it)
-            if (it.nearbyMines == 0) {
-                val neighbors = getNeighborsCells(it)
-                checkNeighbors(neighbors)
+            if (it.isVisible) {
+                clearCell(it)
+                if (it.nearbyMines == 0) {
+                    val neighbors = getNeighborsCells(it)
+                    checkNeighbors(neighbors)
+                }
             }
         }
 
@@ -43,6 +43,9 @@ class ClearZoneWithoutMinesUseCase {
     }
 
     private fun clearCell(cell: Cell) {
+        if (field.grid[Pair(cell.row, cell.column)]!!.isVisible) {
+            field.oneFreeCellLess()
+        }
         field.grid[Pair(cell.row, cell.column)] = cell.copy(
             isVisible = false
         )
@@ -99,15 +102,9 @@ class ClearZoneWithoutMinesUseCase {
                 if (cell.nearbyMines == 0) {
                     nextIterationToInspect.add(cell)
                 } else {
-                    toClean[cell] = cell
+                    clearCell(cell)
                 }
             }
-        }
-    }
-
-    private fun clearRestOfCells() {
-        toClean.keys.map {
-            clearCell(it)
         }
     }
 
