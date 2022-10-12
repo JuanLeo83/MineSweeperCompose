@@ -1,21 +1,18 @@
 package ui.component
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +42,7 @@ fun MineButtonPreview() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MineButton(
     game: MutableState<Game>,
@@ -53,7 +51,7 @@ fun MineButton(
     bombAction: () -> Unit = {},
     clearZoneAction: (cell: Cell) -> Unit = {}
 ) {
-    val showFlag = remember { mutableStateOf(false) }
+    var showFlag by remember { mutableStateOf(false) }
 
     val cellSize = getCellSize(game.value.getSize())
     val backgroundColor = remember { mutableStateOf(Color.Transparent) }
@@ -72,19 +70,27 @@ fun MineButton(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(1.dp),
+                    .padding(1.dp)
+                    .onClick(
+                        matcher = PointerMatcher.mouse(PointerButton.Secondary),
+                        onClick = {
+                            showFlag = !showFlag
+                        }
+                    ),
                 onClick = {
-                    isVisible.value = false
+                    if (!showFlag) {
+                        isVisible.value = false
 
-                    if (cell.hasMine) {
-                        bombAction()
-                        backgroundColor.value = Color.Red
-                    } else {
-                        clearZoneAction(cell)
+                        if (cell.hasMine) {
+                            bombAction()
+                            backgroundColor.value = Color.Red
+                        } else {
+                            clearZoneAction(cell)
+                        }
                     }
                 },
             ) {}
-            if (showFlag.value) {
+            if (showFlag) {
                 Image(
                     painter = painterResource("flag.png"),
                     contentDescription = "flag",
